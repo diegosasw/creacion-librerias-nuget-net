@@ -1,0 +1,48 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+variables:
+  PACKAGE_OUTPUT_DIR: nuget
+
+stages:
+  - build
+  - test
+  - package
+  - delivery
+
+build:
+  stage: build
+  script:
+    - dotnet build --configuration Release
+  artifacts:
+    paths:
+    - test
+    expire_in: 8 hour
+
+test:
+  stage: test
+  script: dotnet test --configuration Release
+  rules:
+    - exists:
+      - test/**/*Tests.csproj
+    
+package_stable:
+  stage: package
+  script:
+    - dotnet pack *.sln --configuration Release --output $PACKAGE_OUTPUT_DIR
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  artifacts:
+    paths:
+      - $PACKAGE_OUTPUT_DIR/
+    expire_in: 8 hour
+
+package_registry:
+  stage: delivery
+  script:
+    - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
+    - dotnet nuget push $PACKAGE_OUTPUT_DIR/**/*.nupkg --source gitlab --skip-duplicate
+
+package_nuget_org:
+  stage: delivery
+  script:
+    - echo "TODO deliver to nuget.org (or other feeds) if desired"

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	  <Title>$(AssemblyName)</Title>
+	  <Description>Ejemplo para Open Webinars</Description>
+	  <Authors>Diego Martin</Authors>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <NeutralLanguage>en</NeutralLanguage>
+	  <ProjectUrl>https://sunnyatticsoftware.com</ProjectUrl>
+	  <PackageProjectUrl>https://gitlab.com/sunnyatticsoftware/open-webinars/talleres</PackageProjectUrl>
+	  <VersionPrefix>1.2.0</VersionPrefix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libraries.Abstractions\Libraries.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>
